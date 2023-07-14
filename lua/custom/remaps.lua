@@ -13,4 +13,10 @@ vim.keymap.set('v','J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v','K', ":m '<-2<CR>gv=gv")
 
 -- Open netrw to explore files: (from ThePrimeagen)
-vim.keymap.set('n','<leader>pf', ":Ex<Enter>")
+vim.keymap.set('n','<leader>pf', "<cmd>Ex<CR>")
+
+-- Navigate through open windows faster: (from NVChad remap)
+vim.keymap.set('n','<C-h>', '<cmd>wincmd h<CR>')
+vim.keymap.set('n','<C-j>', '<cmd>wincmd j<CR>')
+vim.keymap.set('n','<C-k>', '<cmd>wincmd k<CR>')
+vim.keymap.set('n','<C-l>', '<cmd>wincmd l<CR>')
