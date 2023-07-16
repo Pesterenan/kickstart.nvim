@@ -45,6 +45,7 @@ return	{
 			extensions = {'fugitive', 'quickfix'}
 		}
 	end
-	}
+	},
+
 }
 
