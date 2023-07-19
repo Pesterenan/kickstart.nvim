@@ -22,7 +22,7 @@ vim.keymap.set('n','<C-k>', '<cmd>wincmd k<CR>')
 vim.keymap.set('n','<C-l>', '<cmd>wincmd l<CR>')
 
 -- Git related keymaps:
-vim.keymap.set('n','<leader>gs', "<cmd>Git<CR><cmd>Git status<CR>", { desc = "Show [G]it [S]tatus"})
+vim.keymap.set('n','<leader>gs', "<cmd>Git<CR>", { desc = "Show [G]it [S]tatus"})
 vim.keymap.set('n','<leader>gp', "<cmd>Git push<CR>", { desc = "[G]it [P]ush"})
 vim.keymap.set('n','<leader>gl', "<cmd>Git log --oneline<CR>", { desc = "[G]it [L]og one line"})
 
