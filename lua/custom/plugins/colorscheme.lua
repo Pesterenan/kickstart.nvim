@@ -3,12 +3,20 @@ return {
 	{
 		'rose-pine/neovim',
 		config = function()
-			vim.cmd('colorscheme rose-pine')
-			-- Set active buffer background color to be a little lighter
-			vim.api.nvim_set_hl(0, "Normal", { bg = '#272033' })
-			vim.api.nvim_set_hl(0, "NormalFloat", { bg = '#272033' })
+			require('rose-pine').setup({
+				dim_nc_background = true,
+				disable_italics = true,
+			})
 		end
 	},
-	{ 'morhetz/gruvbox' },
-	{ 'tomasr/molokai' },
+	{
+		'ellisonleao/gruvbox.nvim',
+		config = function()
+			require('gruvbox').setup({
+				dim_inactive = true,
+			})
+			-- Auto-sets colorscheme:
+			vim.cmd('colorscheme gruvbox')
+		end
+	},
 }
