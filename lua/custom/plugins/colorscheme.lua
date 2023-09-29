@@ -1,5 +1,13 @@
--- Sets colorscheme to rose-pine
+-- Colorscheme setup:
 return {
+	{
+		-- Plugin to make window's background transparent
+		'xiyaowong/nvim-transparent',
+	},
+	-- Colorschemes:
+	{
+		'tanvirtin/monokai.nvim',
+	},
 	{
 		'rose-pine/neovim',
 		config = function()
