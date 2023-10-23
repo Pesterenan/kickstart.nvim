@@ -163,7 +163,7 @@ local config = {
   init_options = {
     bundles = {
       vim.fn.glob(
-      'C:/Users/renan/Documents/git/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
+        'C:/Users/renan/Documents/git/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
     }
   },
 }
