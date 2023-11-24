@@ -23,8 +23,22 @@ return {
 			require('gruvbox').setup({
 				dim_inactive = true,
 			})
-			-- Auto-sets colorscheme:
-			vim.cmd('colorscheme gruvbox')
 		end
 	},
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			require('catppuccin').setup({
+				dim_inactive = {
+					enabled = true,
+					shade = 'dark',
+					percentage = 0.20,
+				},
+			})
+			-- Auto-sets colorscheme:
+			vim.cmd('colorscheme catppuccin')
+		end
+	}
 }
