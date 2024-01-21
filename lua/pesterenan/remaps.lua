@@ -25,19 +25,15 @@ vim.keymap.set('n', '<C-k>', '<cmd>wincmd k<CR>')
 vim.keymap.set('n', '<C-l>', '<cmd>wincmd l<CR>')
 
 -- Navigate out of Terminal buffers
-vim.keymap.set('t', '<C-h>', '<C-\\><C-N><cmd>wincmd h<CR>')
-vim.keymap.set('t', '<C-j>', '<C-\\><C-N><cmd>wincmd j<CR>')
-vim.keymap.set('t', '<C-k>', '<C-\\><C-N><cmd>wincmd k<CR>')
-vim.keymap.set('t', '<C-l>', '<C-\\><C-N><cmd>wincmd l<CR>')
+vim.keymap.set('t', '<C-H>', '<C-\\><C-N><cmd>wincmd h<CR>')
+vim.keymap.set('t', '<C-J>', '<C-\\><C-N><cmd>wincmd j<CR>')
+vim.keymap.set('t', '<C-K>', '<C-\\><C-N><cmd>wincmd k<CR>')
+vim.keymap.set('t', '<C-L>', '<C-\\><C-N><cmd>wincmd l<CR>')
 
 -- Git related keymaps:
 vim.keymap.set('n', '<leader>gs', "<cmd>Git<CR>", { desc = "Show [G]it [S]tatus" })
 vim.keymap.set('n', '<leader>gp', "<cmd>Git push<CR>", { desc = "[G]it [P]ush" })
 vim.keymap.set('n', '<leader>gl', "<cmd>Git log --oneline<CR>", { desc = "[G]it [L]og one line" })
-vim.keymap.set('n', '<leader>ph', "<cmd>Gitsigns preview_hunk_inline<CR>",
-  { desc = "[G]itsigns [P]review [H]unk inline" })
-vim.keymap.set('n', '<leader>gN', "<cmd>Gitsigns next_hunk<CR>", { desc = "[G]itsigns [N]ext [H]unk" })
-vim.keymap.set('n', '<leader>gP', "<cmd>Gitsigns prev_hunk<CR>", { desc = "[G]itsigns [P]revious [H]unk" })
 
 -- Stay indenting in visual mode
 vim.keymap.set('v', "<", "<gv", { desc = "Less indentation" })
