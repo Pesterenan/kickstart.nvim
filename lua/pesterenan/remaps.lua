@@ -18,12 +18,6 @@ vim.keymap.set('n', '<leader>gL', '<cmd>diffget //3<CR>', { desc = 'Get right si
 -- Open netrw to explore files: (from ThePrimeagen)
 vim.keymap.set('n', '<leader>pv', "<cmd>Ex<CR>", { desc = "Open NetRW" })
 
--- Navigate through open windows faster: (from NVChad remap)
-vim.keymap.set('n', '<C-h>', '<cmd>wincmd h<CR>')
-vim.keymap.set('n', '<C-j>', '<cmd>wincmd j<CR>')
-vim.keymap.set('n', '<C-k>', '<cmd>wincmd k<CR>')
-vim.keymap.set('n', '<C-l>', '<cmd>wincmd l<CR>')
-
 -- Navigate out of Terminal buffers
 vim.keymap.set('t', '<C-H>', '<C-\\><C-N><cmd>wincmd h<CR>')
 vim.keymap.set('t', '<C-J>', '<C-\\><C-N><cmd>wincmd j<CR>')
