@@ -1,7 +1,6 @@
 -- Custom options - Pesterenan
 
--- Set number lines and relative number lines:
-vim.opt.number = true
+-- Set relative number lines and magic search:
 vim.opt.relativenumber = true
 vim.opt.magic = true
 
@@ -12,13 +11,11 @@ vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.smarttab = true
+vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.wrap = false
 
--- Set "maximum length column", always leave 8 lines on the screen visible top or bottom,
--- show git signs on the left
-vim.opt.colorcolumn = "100"
-vim.opt.scrolloff = 10
-vim.opt.signcolumn = "yes"
-vim.opt.updatetime = 50
+-- Set "maximum length column",
+vim.opt.colorcolumn = '100'
+vim.opt.updatetime = 100
 vim.opt.termguicolors = true
