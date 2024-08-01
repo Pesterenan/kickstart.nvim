@@ -1,3 +1,3 @@
-require('pesterenan.options')
-require('pesterenan.remaps')
-require('pesterenan.snippets')
+require 'pesterenan.options'
+require 'pesterenan.remaps'
+require 'pesterenan.snippets'
