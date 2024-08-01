@@ -21,11 +21,12 @@ return {
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
     {
-      "mxsdev/nvim-dap-vscode-js",
-      dependencies = { "mfussenegger/nvim-dap" }
+      'mxsdev/nvim-dap-vscode-js',
+      dependencies = { 'mfussenegger/nvim-dap' },
     },
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'mfussenegger/nvim-jdtls',
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -147,5 +148,6 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+    require('jdtls').setup_dap { hotcodereplace = 'auto' }
   end,
 }
