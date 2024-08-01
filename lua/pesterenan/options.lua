@@ -5,7 +5,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.magic = true
 
--- 4 indent spaces, incremental search highlighting, no line wrap:
+-- 2 indent spaces, incremental search highlighting, no line wrap:
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
@@ -20,3 +20,5 @@ vim.opt.wrap = false
 vim.opt.colorcolumn = "100"
 vim.opt.scrolloff = 10
 vim.opt.signcolumn = "yes"
+vim.opt.updatetime = 50
+vim.opt.termguicolors = true
