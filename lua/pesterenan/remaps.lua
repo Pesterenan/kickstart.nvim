@@ -12,11 +12,11 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 -- While on difftool get changes from either left or right side: (from ThePrimeagen)
-vim.keymap.set('n', '<leader>gJ', '<cmd>diffget //2<CR>', { desc = 'Get left side changes on difftool' })
+vim.keymap.set('n', '<leader>gH', '<cmd>diffget //2<CR>', { desc = 'Get left side changes on difftool' })
 vim.keymap.set('n', '<leader>gL', '<cmd>diffget //3<CR>', { desc = 'Get right side changes on difftool' })
 
 -- Open netrw to explore files: (from ThePrimeagen)
-vim.keymap.set('n', '<leader>pv', "<cmd>Ex<CR>", { desc = "Open NetRW" })
+vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open NetRW' })
 
 -- Navigate out of Terminal buffers
 vim.keymap.set('t', '<C-H>', '<C-\\><C-N><cmd>wincmd h<CR>')
@@ -25,10 +25,10 @@ vim.keymap.set('t', '<C-K>', '<C-\\><C-N><cmd>wincmd k<CR>')
 vim.keymap.set('t', '<C-L>', '<C-\\><C-N><cmd>wincmd l<CR>')
 
 -- Git related keymaps:
-vim.keymap.set('n', '<leader>gs', "<cmd>Git<CR>", { desc = "Show [G]it [S]tatus" })
-vim.keymap.set('n', '<leader>gp', "<cmd>Git push<CR>", { desc = "[G]it [P]ush" })
-vim.keymap.set('n', '<leader>gl', "<cmd>Git log --oneline<CR>", { desc = "[G]it [L]og one line" })
+vim.keymap.set('n', '<leader>gs', '<cmd>Git<CR>', { desc = 'Show [G]it [S]tatus' })
+vim.keymap.set('n', '<leader>gp', '<cmd>Git push<CR>', { desc = '[G]it [P]ush' })
+vim.keymap.set('n', '<leader>gl', '<cmd>Git log --oneline<CR>', { desc = '[G]it [L]og one line' })
 
 -- Stay indenting in visual mode
-vim.keymap.set('v', "<", "<gv", { desc = "Less indentation" })
-vim.keymap.set('v', ">", ">gv", { desc = "More indentation" })
+vim.keymap.set('v', '<', '<gv', { desc = 'Less indentation' })
+vim.keymap.set('v', '>', '>gv', { desc = 'More indentation' })
