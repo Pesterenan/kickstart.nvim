@@ -4,4 +4,9 @@
 -- See the kickstart.nvim README for more information
 require('custom.options')
 require('custom.remaps')
-return {}
+return {
+	{
+		"hrsh7th/cmp-buffer",
+		"hrsh7th/cmp-path",
+	}
+}
