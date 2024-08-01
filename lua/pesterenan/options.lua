@@ -11,11 +11,12 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+vim.opt.smarttab = true
 vim.opt.incsearch = true
 vim.opt.wrap = false
 
 -- Set "maximum length column", always leave 8 lines on the screen visible top or bottom,
 -- show git signs on the left
 vim.opt.colorcolumn = "100"
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 10
 vim.opt.signcolumn = "yes"
