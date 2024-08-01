@@ -81,8 +81,7 @@ rec_ls = function()
   )
 end
 
--- Add my custom snippets
-ls.add_snippets('javascript', {
+local logSnippet = {
   s('log', {
     t 'console.log("',
     f(copy, 1),
@@ -90,4 +89,7 @@ ls.add_snippets('javascript', {
     i(1, 'variable'),
     t ');',
   }),
-})
+}
+-- Add my custom snippets
+ls.add_snippets('javascript', logSnippet)
+ls.add_snippets('typescript', logSnippet)
