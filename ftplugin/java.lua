@@ -1,27 +1,27 @@
-local jdtls_ok, jdtls = pcall(require, "jdtls")
+local jdtls_ok, jdtls = pcall(require, 'jdtls')
 if not jdtls_ok then
-  vim.notify "JDTLS not found, install with `:MasonInstall jdtls`"
+  vim.notify 'JDTLS not found, install with `:MasonInstall jdtls`'
   return
 end
 
 -- Setting root dir:
-local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+local root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
 local root_dir = jdtls.setup.find_root(root_markers)
-if root_dir == "" then
+if root_dir == '' then
   return
 end
 
 -- Data directory - change it to your liking
-local HOME = os.getenv('HOME')
-local workspace_folder = HOME .. "/.workspace" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
+local HOME = os.getenv 'HOME'
+local workspace_folder = HOME .. '/.workspace' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
 
 -- Installation location of jdtls by nvim-lsp-installer
-local JDTLS_LOCATION = vim.fn.stdpath "data" .. "/mason/packages/jdtls"
+local JDTLS_LOCATION = vim.fn.stdpath 'data' .. '/mason/packages/jdtls'
 
 -- Only for Linux and Mac
-local SYSTEM = "win"
-if vim.fn.has "linux" == 1 then
-  SYSTEM = "linux"
+local SYSTEM = 'win'
+if vim.fn.has 'linux' == 1 then
+  SYSTEM = 'linux'
 end
 
 -- Adding  capabilities:
@@ -37,7 +37,7 @@ local config = {
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
-    '-Xms1g',
+    '-Xmx1G',
     '--add-modules=ALL-SYSTEM',
     '--add-opens',
     'java.base/java.util=ALL-UNNAMED',
@@ -67,8 +67,7 @@ local config = {
   settings = {
     java = {
       project = {
-        referencedLibraries = {
-        },
+        referencedLibraries = {},
       },
       eclipse = {
         downloadSources = true,
@@ -88,30 +87,30 @@ local config = {
       format = {
         enabled = true,
         settings = {
-          url = vim.fn.stdpath "config" .. "/lang-servers/intellij-java-google-style.xml",
-          profile = "GoogleStyle",
+          url = vim.fn.stdpath 'config' .. '/lang-servers/intellij-java-google-style.xml',
+          profile = 'GoogleStyle',
         },
       },
-      classPath = {
-      },
+      classPath = {},
       signatureHelp = { enabled = true },
       contentProvider = { preferred = 'fernflower' }, -- Use fernflower to decompile library code
       -- Specify any completion options
       completion = {
         favoriteStaticMembers = {
-          "org.hamcrest.MatcherAssert.assertThat",
-          "org.hamcrest.Matchers.*",
-          "org.hamcrest.CoreMatchers.*",
-          "org.junit.jupiter.api.Assertions.*",
-          "java.util.Objects.requireNonNull",
-          "java.util.Objects.requireNonNullElse",
-          "org.mockito.Mockito.*"
+          'org.hamcrest.MatcherAssert.assertThat',
+          'org.hamcrest.Matchers.*',
+          'org.hamcrest.CoreMatchers.*',
+          'org.junit.jupiter.api.Assertions.*',
+          'java.util.Objects.requireNonNull',
+          'java.util.Objects.requireNonNullElse',
+          'org.mockito.Mockito.*',
         },
         filteredTypes = {
-          "com.sun.*",
-          "io.micrometer.shaded.*",
-          "java.awt.*",
-          "jdk.*", "sun.*",
+          'com.sun.*',
+          'io.micrometer.shaded.*',
+          'java.awt.*',
+          'jdk.*',
+          'sun.*',
         },
       },
       -- Specify any options for organizing imports
@@ -124,7 +123,7 @@ local config = {
       -- How code generation should act
       codeGeneration = {
         toString = {
-          template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
+          template = '${object.className}{${member.name()}=${member.value}, ${otherMembers}}',
         },
         hashCodeEquals = {
           useJava7Objects = true,
@@ -137,20 +136,20 @@ local config = {
       -- And search for `interface RuntimeOption`
       -- The `name` is NOT arbitrary, but must match one of the elements from `enum ExecutionEnvironment` in the link above
       configuration = {
-        updateBuildConfiguration = "interactive",
+        updateBuildConfiguration = 'interactive',
         runtimes = {
           {
-            name = "JavaSE-17",
-            path = 'C:/Program Files/Eclipse Adoptium/jdk-17.0.8.101-hotspot/',
+            name = 'JavaSE-21',
+            path = 'C:/Program Files/Eclipse Adoptium/jdk-21.0.6.7-hotspot',
             default = true,
           },
           {
-            name = "JavaSE-1.8",
-            path = 'C:/Program Files/Java/jre-1.8'
+            name = 'JavaSE-1.8',
+            path = 'C:/Program Files/Java/jre1.8.0_431',
           },
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   -- Language server `initializationOptions`
@@ -162,9 +161,8 @@ local config = {
   -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
   init_options = {
     bundles = {
-      vim.fn.glob(
-        'C:/Users/renan/Documents/git/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
-    }
+      vim.fn.glob 'C:/Users/renan/Documents/git/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
+    },
   },
 }
 -- This starts a new client & server,
@@ -173,20 +171,20 @@ jdtls.start_or_attach(config)
 
 local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-vim.keymap.set('n', '<leader>oi', '<cmd>lua require\'jdtls\'.organize_imports()<CR>', { desc = '[O]rganize [I]mports' })
+vim.keymap.set('n', '<leader>oi', "<cmd>lua require'jdtls'.organize_imports()<CR>", { desc = '[O]rganize [I]mports' })
 vim.keymap.set('n', '<leader>rj', function()
   local paths = {}
-  table.insert(paths, vim.fn.getcwd() .. '/bin');
-  local classpathFilename = vim.fn.getcwd() .. '/.classpath';
-  local file = io.open(classpathFilename, "r")
+  table.insert(paths, vim.fn.getcwd() .. '/bin')
+  local classpathFilename = vim.fn.getcwd() .. '/.classpath'
+  local file = io.open(classpathFilename, 'r')
   if file then
-    local content = file:read("*a")
+    local content = file:read '*a'
     file:close()
     for path in string.gmatch(content, 'path="([^"]*.jar)"') do
       table.insert(paths, vim.fn.getcwd() .. '/' .. path)
     end
   end
-  local classpath = table.concat(paths, ";")
+  local classpath = table.concat(paths, ';')
   for path in ipairs(paths) do
     print(path)
   end

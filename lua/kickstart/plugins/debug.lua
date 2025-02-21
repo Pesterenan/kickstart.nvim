@@ -26,7 +26,7 @@ return {
     },
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
-    'mfussenegger/nvim-jdtls',
+    { 'mfussenegger/nvim-jdtls', dependencies = { 'mfussenegger/nvim-dap' } },
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
