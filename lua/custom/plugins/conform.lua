@@ -3,22 +3,39 @@ return {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
+    keys = function()
+      vim.g.format_on_save = false
+
+      local function toggle_format_on_save()
+        vim.g.format_on_save = not vim.g.format_on_save
+        local state = vim.g.format_on_save and 'ON' or 'OFF'
+        vim.notify('Format on save: ' .. state, vim.log.levels.INFO)
+
+        vim.keymap.set('n', '<leader>fs', toggle_format_on_save, {
+          desc = '[F]ormat on Save: ' .. state,
+        })
+      end
+
+      return {
+        {
+          '<leader>f',
+          function() require('conform').format { async = true, lsp_format = 'fallback' } end,
+          mode = 'n',
+          desc = '[F]ormat buffer',
+        },
+        {
+          '<leader>fs',
+          toggle_format_on_save,
+          mode = 'n',
+          desc = '[F]ormat on Save: OFF', -- inicial
+        },
+      }
+    end,
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
+        if not vim.g.format_on_save then return nil end
+
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
@@ -31,15 +48,12 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'eslint_d', 'prettier', 'prettierd' },
-        javascriptreact = { 'eslint_d', 'prettier', 'prettierd' },
-        typescript = { 'eslint_d', 'prettier', 'prettierd' },
-        typescriptreact = { 'eslint_d', 'prettier', 'prettierd' },
+        javascript = { 'eslint_d', 'prettierd' },
+        javascriptreact = { 'eslint_d', 'prettierd' },
+        typescript = { 'eslint_d', 'prettierd' },
+        typescriptreact = { 'eslint_d', 'prettierd' },
         java = { 'google-java-format' },
+        json = { 'jq' },
       },
     },
   },
