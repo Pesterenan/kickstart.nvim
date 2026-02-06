@@ -69,8 +69,7 @@ local function safe_get_node_text(node)
 
   -- alguns helpers retornam tabela de linhas; garantimos string final
   if type(txt) == "table" then
-    return table.concat(txt, "
-")
+    return table.concat(txt, "\n")
   end
   return txt
 end
@@ -164,11 +163,9 @@ local function get_visual_selection_text()
     -- fallback simples usando getline
     local raw = vim.api.nvim_buf_get_lines(bufnr, sr-1, er, false)
     if not raw then return nil, sr, er end
-    return table.concat(raw, "
-"), sr, er
+    return table.concat(raw, "\n"), sr, er
   end
-  return table.concat(lines, "
-"), sr, er
+  return table.concat(lines, "\n"), sr, er
 end
 
 -- ===================================================================
@@ -177,8 +174,7 @@ end
 -- ===================================================================
 local function insert_line_after(row, text)
   local bufnr = vim.api.nvim_get_current_buf()
-  local lines = vim.split(text, '
-', true)
+  local lines = vim.split(text, '\n', true)
   -- inserir em índice `row` (inserir depois de `row` 1-indexed)
   vim.api.nvim_buf_set_lines(bufnr, row, row, false, lines)
 end

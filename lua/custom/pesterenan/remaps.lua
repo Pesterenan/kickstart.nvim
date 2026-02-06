@@ -16,10 +16,10 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open NetRW' })
 
 -- Navigate out of Terminal buffers
-vim.keymap.set('t', '<C-H>', '<C-\><C-N><cmd>wincmd h<CR>')
-vim.keymap.set('t', '<C-J>', '<C-\><C-N><cmd>wincmd j<CR>')
-vim.keymap.set('t', '<C-K>', '<C-\><C-N><cmd>wincmd k<CR>')
-vim.keymap.set('t', '<C-L>', '<C-\><C-N><cmd>wincmd l<CR>')
+vim.keymap.set('t', '<C-H>', '<C-\\><C-N><cmd>wincmd h<CR>')
+vim.keymap.set('t', '<C-J>', '<C-\\><C-N><cmd>wincmd j<CR>')
+vim.keymap.set('t', '<C-K>', '<C-\\><C-N><cmd>wincmd k<CR>')
+vim.keymap.set('t', '<C-L>', '<C-\\><C-N><cmd>wincmd l<CR>')
 
 -- Stay indenting in visual mode
 vim.keymap.set('v', '<', '<gv', { desc = 'Less indentation' })
