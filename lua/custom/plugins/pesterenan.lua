@@ -7,9 +7,7 @@ return {
     dir = vim.fn.stdpath 'config',
     dependencies = { 'L3MON4D3/LuaSnip' },
     event = 'VimEnter',
-    config = function()
-      require 'custom.pesterenan.snippets'
-    end,
+    config = function() require 'custom.pesterenan.snippets' end,
   },
   {
     'williamboman/mason.nvim',
@@ -20,10 +18,10 @@ return {
     config = function()
       require('mason').setup()
       require('mason-lspconfig').setup {
-        ensure_installed = { 'lua_ls' },
+        ensure_installed = { 'cssls', 'bashls', 'eslint', 'lua_ls', 'ts_ls', 'jsonls' },
       }
       require('mason-tool-installer').setup {
-        ensure_installed = { 'stylua', 'lua-language-server' },
+        ensure_installed = { 'prettier', 'jq', 'stylua' },
       }
     end,
   },
