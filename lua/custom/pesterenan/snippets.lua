@@ -27,6 +27,29 @@ local parse = require('luasnip.util.parser').parse_snippet
 local ms = ls.multi_snippet
 local k = require('luasnip.nodes.key_indexer').new_key
 
+-- Mapeia <C-M> (Enter) para pular para o próximo campo
+vim.keymap.set({ "i", "s" }, "<C-M>", function()
+  if ls.expand_or_jumpable() then
+    ls.expand_or_jump()
+  else
+    -- Se não tiver nada para pular, age como um Enter normal
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", false)
+  end
+end, { silent = true })
+-- Mapeia <C-N> para pular para o próximo campo
+vim.keymap.set({ "i", "s" }, "<C-N>", function()
+  if ls.expand_or_jumpable() then
+    ls.expand_or_jump()
+  end
+end, { silent = true })
+
+-- Mapeia <C-P> para voltar pro campo anterior
+vim.keymap.set({ "i", "s" }, "<C-P>", function()
+  if ls.jumpable(-1) then
+    ls.jump(-1)
+  end
+end, { silent = true })
+
 -- ===================================================================
 -- Tree-sitter
 -- ===================================================================
