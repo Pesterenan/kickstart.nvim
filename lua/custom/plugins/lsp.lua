@@ -1,9 +1,7 @@
 return {
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      'saghen/blink.cmp',
-    },
+    dependencies = { 'saghen/blink.cmp' },
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
@@ -12,22 +10,21 @@ return {
       vim.lsp.config('ts_ls', {
         capabilities = capabilities,
       })
-      vim.lsp.enable('ts_ls')
+      vim.lsp.enable 'ts_ls'
 
       vim.lsp.config('eslint', {
         capabilities = capabilities,
       })
-      vim.lsp.enable('eslint')
+      vim.lsp.enable 'eslint'
 
       -- Autoformat on save para ESLint
       vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = { '*.js', '*.ts', '*.jsx', '*.tsx' },
         callback = function()
-          if vim.fn.exists ':EslintFixAll' > 0 then
-            vim.cmd 'EslintFixAll'
-          end
+          if vim.fn.exists ':EslintFixAll' > 0 then vim.cmd 'EslintFixAll' end
         end,
       })
     end,
   },
 }
+
