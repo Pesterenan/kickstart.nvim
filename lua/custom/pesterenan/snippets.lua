@@ -27,12 +27,15 @@ local parse = require('luasnip.util.parser').parse_snippet
 local ms = ls.multi_snippet
 local k = require('luasnip.nodes.key_indexer').new_key
 
--- Mapeia <C-M> (Enter) para pular para o próximo campo
+-- Mapeia <C-M> (Enter) para aceitar completion do blink.cmp,
+-- ou pular para o próximo campo do snippet, ou inserir nova linha.
 vim.keymap.set({ "i", "s" }, "<C-M>", function()
-  if ls.expand_or_jumpable() then
+  local cmp = require('blink.cmp')
+  if cmp.is_visible() or cmp.is_ghost_text_visible() then
+    cmp.select_and_accept()
+  elseif ls.expand_or_jumpable() then
     ls.expand_or_jump()
   else
-    -- Se não tiver nada para pular, age como um Enter normal
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", false)
   end
 end, { silent = true })
