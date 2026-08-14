@@ -28,8 +28,6 @@ require('conform').setup({
   },
 })
 
-vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format({ async = true }) end, { desc = '[F]ormat buffer' })
-
 local function toggle_format_on_save()
   vim.g.format_on_save = not vim.g.format_on_save
   local state = vim.g.format_on_save and 'ON' or 'OFF'
