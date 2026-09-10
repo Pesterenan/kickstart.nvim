@@ -115,20 +115,68 @@ local function get_root(abs_path)
   return vim.fn.getcwd()
 end
 
+local function read_package_scripts(root)
+  local pkg = vim.fs.joinpath(root, 'package.json')
+  if vim.fn.filereadable(pkg) == 0 then return {} end
+  local ok_lines, lines = pcall(vim.fn.readfile, pkg)
+  if not ok_lines then return {} end
+  local ok_json, data = pcall(vim.json.decode, table.concat(lines, '\n'))
+  if not ok_json or type(data) ~= 'table' then return {} end
+  if type(data.scripts) == 'table' then return data.scripts end
+  return {}
+end
+
+-- Scripts npm consultados por modo (mesma ordem do fallback em `build_cmd`).
+local function preferred_scripts(mode)
+  if mode == 'watch' then return { 'test:watch', 'test' } end
+  return { 'test:unit', 'test' }
+end
+
+-- Extrai `--config <arq>` / `--config=<arq>` do script npm do modo.
+-- É a fonte da verdade: o próprio projeto declara qual config vale
+-- (ex. `"test:unit": "vitest --config vitest.unit.config.ts"`).
+-- Retorna o path absoluto ou nil.
+local function config_from_npm_script(scripts, mode, root)
+  for _, name in ipairs(preferred_scripts(mode)) do
+    local script = scripts[name]
+    if type(script) == 'string' then
+      local raw = script:match '%-%-config%s*=%s*([^%s]+)' or script:match '%-%-config%s+([^%s]+)'
+      if raw ~= nil then
+        local unquoted = raw:gsub('^["\']', ''):gsub('["\']$', '')
+        local cfg = unquoted
+        if not (cfg:match '^%a:' ~= nil or cfg:match '^/' ~= nil or cfg:match '^\\' ~= nil) then cfg = vim.fs.joinpath(root, cfg) end
+        if vim.fn.filereadable(cfg) == 1 then return cfg end
+      end
+    end
+  end
+  return nil
+end
+
 -- Vitest auto-descobre `vitest.config.*` / `vite.config.*` a partir do root.
--- Retorna um path explícito quando o vitest não acertaria sozinho:
--- - config com nome fora do padrão no root (ex. `vitest.unit.config.ts`);
--- - config padrão fora do root (ex. monorepo).
--- Regra no root: `vitest.config.*` canônico vence; senão, um custom único
--- vence `vite.config.ts`; múltiplos customs -> WARN + primeiro alfabético.
-local function find_explicit_config(abs_path, root)
+-- Ordem de resolução:
+-- 1. `--config` declarado no script npm do modo (`test:unit`/`test:watch`);
+-- 2. `vitest.config.*` canônico no root -> nil (auto-discovery acerta);
+-- 3. custom não-storybook no root (1 -> usa; N -> WARN + 1o. alfabético);
+-- 4. custom storybook só se for a única opção (WARN);
+-- 5. config padrão fora do root (ex. monorepo).
+local function find_explicit_config(abs_paths, mode, root)
+  local scripts = read_package_scripts(root)
+  local from_script = config_from_npm_script(scripts, mode, root)
+  if from_script ~= nil then return from_script end
   local ok_dir, iter = pcall(vim.fs.dir, root)
   if ok_dir and iter ~= nil then
-    local customs = {}
+    local customs, storybooks = {}, {}
     for entry, ftype in iter do
       if ftype == 'file' then
         if STANDARD_CONFIG[entry] and entry:match '^vitest%.' ~= nil then return nil end
-        if entry:match(CUSTOM_CONFIG_PAT) ~= nil then table.insert(customs, vim.fs.joinpath(root, entry)) end
+        if entry:match(CUSTOM_CONFIG_PAT) ~= nil then
+          local full = vim.fs.joinpath(root, entry)
+          if entry:lower():find('storybook', 1, true) ~= nil then
+            table.insert(storybooks, full)
+          else
+            table.insert(customs, full)
+          end
+        end
       end
     end
     if #customs == 1 then return customs[1] end
@@ -137,8 +185,13 @@ local function find_explicit_config(abs_path, root)
       vim.notify('[Testing] múltiplos configs: ' .. table.concat(customs, ', ') .. ' (usando ' .. customs[1] .. ')', vim.log.levels.WARN)
       return customs[1]
     end
+    if #storybooks >= 1 then
+      table.sort(storybooks)
+      vim.notify('[Testing] só há config storybook, usando ' .. storybooks[1], vim.log.levels.WARN)
+      return storybooks[1]
+    end
   end
-  local start = vim.fn.fnamemodify(abs_path, ':p:h')
+  local start = vim.fn.fnamemodify(abs_paths[1], ':p:h')
   local ok, found = pcall(vim.fs.find, CONFIG_NAMES, { path = start, upward = true, type = 'file', limit = 1 })
   if not ok or found == nil or #found == 0 then return nil end
   local cfg = found[1]
@@ -156,23 +209,12 @@ local function has_local_vitest(root)
   return false
 end
 
-local function read_package_scripts(root)
-  local pkg = vim.fs.joinpath(root, 'package.json')
-  if vim.fn.filereadable(pkg) == 0 then return {} end
-  local ok_lines, lines = pcall(vim.fn.readfile, pkg)
-  if not ok_lines then return {} end
-  local ok_json, data = pcall(vim.json.decode, table.concat(lines, '\n'))
-  if not ok_json or type(data) ~= 'table' then return {} end
-  if type(data.scripts) == 'table' then return data.scripts end
-  return {}
-end
-
 --- Monta o comando (lista, sem shell) + cwd.
 --- @param abs_paths table lista de arquivos de teste
 --- @param mode 'single'|'watch'
 --- @return table|nil cmd, string|nil cwd
 local function build_cmd(abs_paths, mode, root)
-  local cfg = find_explicit_config(abs_paths[1], root)
+  local cfg = find_explicit_config(abs_paths, mode, root)
   if has_local_vitest(root) then
     local cmd = { 'npx', 'vitest' }
     if cfg ~= nil then vim.list_extend(cmd, { '--config', cfg }) end
