@@ -8,7 +8,9 @@
 -- resolve os irmãos `penTool.test.ts`, `penTool.bezier.test.ts`, ...; fora disso avisa e não abre.
 -- Usa `npx vitest` direto; se não houver vitest local, cai para
 -- `npm run test:unit` (tf) / `npm run test:watch` (tr).
--- `--config` só é passado quando o config está fora da raiz do projeto.
+-- `--config` só é passado quando necessário: config com nome fora do padrão
+-- (ex. `vitest.unit.config.ts`, que o vitest nunca auto-descobre) ou config
+-- padrão fora da raiz (ex. monorepo).
 
 local M = {}
 
@@ -26,6 +28,15 @@ local CONFIG_NAMES = {
   'vite.config.js',
   'vite.config.mjs',
 }
+
+local STANDARD_CONFIG = {}
+for _, name in ipairs(CONFIG_NAMES) do
+  STANDARD_CONFIG[name] = true
+end
+
+-- Configs vitest com nome fora do padrão, que o vitest nunca auto-descobre
+-- (ex. `vitest.unit.config.ts`, `vitest.e2e.config.ts`).
+local CUSTOM_CONFIG_PAT = '^vitest%..*%.config%.[cm]?[jt]s$'
 
 local ROOT_MARKERS = {
   'package.json',
@@ -104,9 +115,29 @@ local function get_root(abs_path)
   return vim.fn.getcwd()
 end
 
--- Vitest auto-descobre o config a partir do root. Só retorna um path
--- explícito quando o config está fora do root (ex. monorepo).
+-- Vitest auto-descobre `vitest.config.*` / `vite.config.*` a partir do root.
+-- Retorna um path explícito quando o vitest não acertaria sozinho:
+-- - config com nome fora do padrão no root (ex. `vitest.unit.config.ts`);
+-- - config padrão fora do root (ex. monorepo).
+-- Regra no root: `vitest.config.*` canônico vence; senão, um custom único
+-- vence `vite.config.ts`; múltiplos customs -> WARN + primeiro alfabético.
 local function find_explicit_config(abs_path, root)
+  local ok_dir, iter = pcall(vim.fs.dir, root)
+  if ok_dir and iter ~= nil then
+    local customs = {}
+    for entry, ftype in iter do
+      if ftype == 'file' then
+        if STANDARD_CONFIG[entry] and entry:match '^vitest%.' ~= nil then return nil end
+        if entry:match(CUSTOM_CONFIG_PAT) ~= nil then table.insert(customs, vim.fs.joinpath(root, entry)) end
+      end
+    end
+    if #customs == 1 then return customs[1] end
+    if #customs > 1 then
+      table.sort(customs)
+      vim.notify('[Testing] múltiplos configs: ' .. table.concat(customs, ', ') .. ' (usando ' .. customs[1] .. ')', vim.log.levels.WARN)
+      return customs[1]
+    end
+  end
   local start = vim.fn.fnamemodify(abs_path, ':p:h')
   local ok, found = pcall(vim.fs.find, CONFIG_NAMES, { path = start, upward = true, type = 'file', limit = 1 })
   if not ok or found == nil or #found == 0 then return nil end
