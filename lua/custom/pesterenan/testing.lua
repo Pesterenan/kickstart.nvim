@@ -260,13 +260,14 @@ end
 
 local function ensure_float_win(title)
   if is_valid_win(M.float.win) then return M.float.win end
-  local width = math.floor(vim.o.columns * 0.55)
-  local height = math.floor(vim.o.lines * 0.60)
+  -- Quadrante superior direito: dá para codar embaixo/enquanto o watch roda.
+  local width = math.floor(vim.o.columns * 0.40)
+  local height = math.floor(vim.o.lines * 0.40)
   if width < 40 then width = 40 end
   if height < 10 then height = 10 end
-  local row = math.floor((vim.o.lines - height) / 2) - 1
-  local col = math.floor((vim.o.columns - width) / 2)
-  if row < 0 then row = 0 end
+  if width >= vim.o.columns then width = vim.o.columns - 2 end
+  local row = 1
+  local col = vim.o.columns - width - 2
   if col < 0 then col = 0 end
   if not is_valid_buf(M.float.buf) then M.float.buf = fresh_term_buf() end
   local win = vim.api.nvim_open_win(M.float.buf, false, {
