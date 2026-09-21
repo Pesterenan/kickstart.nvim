@@ -8,6 +8,7 @@
 
 vim.pack.add {
   'https://github.com/mfussenegger/nvim-dap',
+  'https://github.com/mfussenegger/nvim-jdtls',
   'https://github.com/rcarriga/nvim-dap-ui',
   'https://github.com/nvim-neotest/nvim-nio',
   'https://github.com/mason-org/mason.nvim',
@@ -93,3 +94,4 @@ require('dap-go').setup {
     detached = vim.fn.has 'win32' == 0,
   },
 }
+require('jdtls').setup_dap { hotcodereplace = 'auto' }
