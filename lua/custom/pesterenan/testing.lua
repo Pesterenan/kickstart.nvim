@@ -339,7 +339,7 @@ local function ensure_float_win(title)
   if width < 40 then width = 40 end
   if height < 10 then height = 10 end
   if width >= vim.o.columns then width = vim.o.columns - 2 end
-  local row = 1
+  local row = vim.o.lines - height - 6
   local col = vim.o.columns - width - 2
   if col < 0 then col = 0 end
   if not is_valid_buf(M.float.buf) then M.float.buf = fresh_term_buf() end
